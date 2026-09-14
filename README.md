@@ -7,7 +7,7 @@ The site demonstrates a simple "Buy Recap" shopping experience where you can add
 ## Structure
 
 ```
-src/
+docs/
 ├── index.html              # Landing page with navigation
 ├── js/
 │   └── selectors.js        # Tiny DOM selector helpers ($$one, $$all, $$array)
@@ -22,17 +22,19 @@ src/
 
 ## How to run
 
-There is no build step or server required. Just open `src/index.html` (or `src/buy-ui/buy.html`) directly in a browser via `file://`.
+There is no build step or server required. Just open `docs/index.html` (or `docs/buy-ui/buy.html`) directly in a browser via `file://`.
 
 For live reload while editing, use the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) VS Code extension (right-click an HTML file and choose "Open with Live Server").
 
-Alternatively, you can serve the `src` folder with any static file server, for example Python's built-in server:
+Alternatively, you can serve the `docs` folder with any static file server, for example Python's built-in server:
 
 ```sh
-python -m http.server -d src
+python -m http.server -d docs
 ```
 
 Then visit <http://localhost:8000>.
+
+The site is also published on GitHub Pages at <https://arkenidar.github.io/html-pure-js/>.
 
 ## Pages
 
