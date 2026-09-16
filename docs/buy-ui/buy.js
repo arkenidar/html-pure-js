@@ -13,37 +13,64 @@ const orderItems = [
     { name: 'Item 3', price: 5.25 },
 ];
 
-const orderList = $$one('#item-list');
-const availableList = $$one('#available-items');
-const clearAllButton = $$one('#clear-all');
+const orderList = $$one('ul#order-list');
+const availableList = $$one('ul#available-list');
+const clearAllButton = $$one('button#clear-all');
 
-function renderItem(item, buttonClass, buttonLabel) {
+const formatPrice = (price) => '$' + parseFloat(price).toFixed(2);
+
+function buttonTemplate(button) {
+    return `<button class="${button.class}"> ${button.label} </button>`;
+}
+
+function renderItem(item, buttons) {
     const li = document.createElement('li');
-    li.dataset.name = item.name;
-    li.dataset.price = item.price.toFixed(2);
-    li.innerHTML = `${item.name} - $${item.price.toFixed(2)}<button class="${buttonClass}">${buttonLabel}</button>`;
+    const data = li.dataset;
+    Object.assign(data, item);
+    const formattedPrice = formatPrice(item.price);
+    const buttonsHTML = buttons.map(buttonTemplate).join('\n');
+    li.innerHTML = `${item.name} - ${formattedPrice} ${buttonsHTML}`;
     return li;
 }
 
 function updateTotal() {
     const items = $$array('li', orderList);
-    const total = $$one('#total');
+    const total = $$one('p#total');
     let sum = 0;
     items.forEach(item => {
         sum += parseFloat(item.dataset.price);
     });
-    total.textContent = `Total: $${sum.toFixed(2)}`;
-};
+    total.textContent = `Total: ${formatPrice(sum)}`;
+}
+
+const removeButton = [{ class: 'remove', label: 'Remove' }];
+const addButton = [{ class: 'add', label: 'Add' }];
 
 function addItemToList(item) {
-    const li = renderItem({ name: item.dataset.name, price: parseFloat(item.dataset.price) }, 'remove', 'Remove');
+    const data = item.dataset;
+    const { name, price } = data;
+    const li = renderItem({ name, price }, removeButton);
     orderList.appendChild(li);
     updateTotal();
 }
 
-orderItems.forEach(item => orderList.appendChild(renderItem(item, 'remove', 'Remove')));
-availableItems.forEach(item => availableList.appendChild(renderItem(item, 'add', 'Add')));
+function itemsToList(items, renderFunction, listElement) {
+    items.forEach(item => listElement.appendChild(renderFunction(item)));
+}
+
+const renderOrderItem = (item) => renderItem(item, removeButton);
+itemsToList(orderItems, renderOrderItem, orderList);
+
+const renderAvailableItem = (item) => renderItem(item, addButton);
+itemsToList(availableItems, renderAvailableItem, availableList);
+
 updateTotal();
+
+availableList.addEventListener('click', (event) => {
+    if (event.target.closest('button.add')) {
+        addItemToList(event.target.closest('li'));
+    }
+});
 
 orderList.addEventListener('click', (event) => {
     if (event.target.closest('button.remove')) {
@@ -56,10 +83,4 @@ clearAllButton.addEventListener('click', () => {
     const items = $$array('li', orderList);
     items.forEach(item => item.remove());
     updateTotal();
-});
-
-availableList.addEventListener('click', (event) => {
-    if (event.target.closest('button.add')) {
-        addItemToList(event.target.closest('li'));
-    }
 });
