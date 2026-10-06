@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>areas and operations</title>
+</head>
+
+<body>
+
+    <canvas id="myCanvas" width="500" height="500" style="border:1px solid #000000;"></canvas>
+
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Get the canvas element and its context
+
+        function drawShapes() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw a rectangle
+            ctx.fillStyle = "#FF0000";
+            ctx.fillRect(50, 50, 150, 100);
+
+            // Draw a circle
+            ctx.beginPath();
+            ctx.arc(300, 150, 50, 0, 2 * Math.PI);
+            ctx.fillStyle = "#00FF00";
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw a triangle
+            ctx.beginPath();
+            ctx.moveTo(200, 300);
+            ctx.lineTo(250, 400);
+            ctx.lineTo(150, 400);
+            ctx.closePath();
+            ctx.fillStyle = "#0000FF";
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw a line
+            ctx.beginPath();
+            ctx.moveTo(50, 450);
+            ctx.lineTo(450, 450);
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw an ellipse
+            ctx.beginPath();
+            ctx.ellipse(300, 350, 75, 50, 0, 0, 2 * Math.PI);
+            ctx.fillStyle = "#FFFF00";
+            ctx.fill();
+            ctx.stroke();
+        }
+        drawShapes();
+
+        // Redraw the shapes every second
+        setInterval(drawShapes, 1000);
+        // You can add more drawing operations here if needed
+        // Example: Draw a moving circle
+        var x = 300;
+        var y = 150;
+        var radius = 50;
+        var dx = 2;
+        var dy = 2;
+
+        function drawMovingCircle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawShapes();
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = "#00FFFF";
+            ctx.fill();
+            ctx.stroke();
+
+            x += dx;
+            y += dy;
+
+            if (x + radius > canvas.width || x - radius < 0) {
+                dx = -dx;
+            }
+            if (y + radius > canvas.height || y - radius < 0) {
+                dy = -dy;
+            }
+        }
+
+        drawLoop();
+        function drawLoop() {
+            drawMovingCircle();
+            requestAnimationFrame(drawLoop);
+        }
+
+    </script>
+</body>
+
+</html>
